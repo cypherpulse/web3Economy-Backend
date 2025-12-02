@@ -1,7 +1,7 @@
 ### Web3 Economy Backend API Testing
 ### Base URL
 @baseUrl = http://localhost:3001/api
-@adminToken = {{login.response.body.data.token}}
+@adminToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmYzYWZiNjM5MDhjYjQ2NzE1ZWI4NiIsImVtYWlsIjoiam9obmJyYWRpbGw2N0BnbWFpbC5jb20iLCJpYXQiOjE3NjQ3MDMxNjAsImV4cCI6MTc2NTMwNzk2MH0.MFmTEeIfuc3QMynA0H2Wgv_bG5Hb993DK0nPMQGOCj8
 @blogId = {{createBlog.response.body.data._id}}
 @showcaseId = {{createShowcase.response.body.data._id}}
 
@@ -34,8 +34,8 @@ POST {{baseUrl}}/admin/login
 Content-Type: application/json
 
 {
-  "email": "admin@web3economy.com",
-  "password": "SecurePassword123!"
+  "email": "johnbradill67@gmail.com",
+  "password": "x3h3y8ab"
 }
 
 ### Get Current Admin Profile
@@ -101,6 +101,8 @@ Content-Type: application/json
   "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/web3-summit-2025.jpg",
   "registrationUrl": "https://web3summit2025.eventbrite.com"
 }
+
+###
 
 @eventId = {{createEvent.response.body.data.id}}
 
@@ -201,6 +203,7 @@ Content-Type: application/json
   "followers": "125K"
 }
 
+###
 @creatorId = {{createCreator.response.body.data.id}}
 
 ### Create Another Creator
@@ -332,6 +335,7 @@ Content-Type: application/json
   "websiteUrl": "https://baseswap.fi"
 }
 
+###
 @projectId = {{createProject.response.body.data.id}}
 
 ### Create Another Project - NFT Marketplace
@@ -477,6 +481,8 @@ Content-Type: application/json
   "tags": ["Base", "Ethereum", "L2", "Getting Started", "Blockchain"],
   "featured": true
 }
+
+###
 
 @resourceId = {{createResource.response.body.data.id}}
 

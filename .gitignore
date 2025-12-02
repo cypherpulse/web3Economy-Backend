@@ -26,11 +26,12 @@ npm-debug.log*
 
 # Coverage
 coverage/
+docs
 
 # Misc
 *.tmp
 *.temp
 
-doc
+docs/
 
 .ps1

@@ -1,0 +1,1335 @@
+### Web3 Economy Backend API Testing
+### Base URL
+@baseUrl = http://localhost:3001/api
+@adminToken = {{login.response.body.data.token}}
+@blogId = {{createBlog.response.body.data._id}}
+@showcaseId = {{createShowcase.response.body.data._id}}
+
+### ==========================================
+### HEALTH CHECK
+### ==========================================
+
+### Health Check
+GET http://localhost:3001/health
+
+### ==========================================
+### ADMIN AUTHENTICATION
+### ==========================================
+
+### Register First Admin (run this first to create an admin)
+### Note: After first admin, you need to be authenticated to create more admins
+POST {{baseUrl}}/admin/register
+Content-Type: application/json
+
+{
+  "email": "admin@web3economy.com",
+  "password": "SecurePassword123!",
+  "name": "Super Admin",
+  "role": "superadmin"
+}
+
+### Admin Login
+# @name login
+POST {{baseUrl}}/admin/login
+Content-Type: application/json
+
+{
+  "email": "admin@web3economy.com",
+  "password": "SecurePassword123!"
+}
+
+### Get Current Admin Profile
+GET {{baseUrl}}/admin/me
+Authorization: Bearer {{adminToken}}
+
+### Register Another Admin (requires authentication)
+POST {{baseUrl}}/admin/register
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "editor@web3economy.com",
+  "password": "EditorPass123!",
+  "name": "Content Editor",
+  "role": "admin"
+}
+
+### Change Password
+POST {{baseUrl}}/admin/change-password
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "SecurePassword123!",
+  "newPassword": "NewSecurePassword456!"
+}
+
+### ==========================================
+### EVENTS
+### ==========================================
+
+### Get All Events (Public)
+GET {{baseUrl}}/events
+
+### Get Events with Filters
+GET {{baseUrl}}/events?status=upcoming&type=Conference&page=1&limit=10
+
+### Get Upcoming Events Only
+GET {{baseUrl}}/events?status=upcoming
+
+### Get Past Events Only
+GET {{baseUrl}}/events?status=past
+
+### Get Single Event by ID
+GET {{baseUrl}}/events/{{eventId}}
+
+### Create Event (Admin Only)
+# @name createEvent
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Base Web3 Summit 2025",
+  "date": "March 15-17, 2025",
+  "location": "San Francisco, CA",
+  "attendees": 5000,
+  "description": "The premier Web3 conference bringing together builders, creators, and innovators from the Base ecosystem. Join us for three days of talks, workshops, and networking.",
+  "type": "Conference",
+  "price": "$299",
+  "status": "upcoming",
+  "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/web3-summit-2025.jpg",
+  "registrationUrl": "https://web3summit2025.eventbrite.com"
+}
+
+@eventId = {{createEvent.response.body.data.id}}
+
+### Create Another Event - Workshop
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Smart Contract Security Workshop",
+  "date": "January 20, 2025",
+  "location": "Online",
+  "attendees": 200,
+  "description": "Learn best practices for writing secure smart contracts on Base. Hands-on workshop covering common vulnerabilities and how to avoid them.",
+  "type": "Workshop",
+  "price": "Free",
+  "status": "upcoming",
+  "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/security-workshop.jpg",
+  "registrationUrl": "https://web3economy.com/events/security-workshop"
+}
+
+### Create Hackathon Event
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Base Builder Hackathon",
+  "date": "February 1-3, 2025",
+  "location": "Virtual + NYC Hub",
+  "attendees": 1500,
+  "description": "48-hour hackathon building the future of onchain economy. $100K in prizes across multiple tracks including DeFi, NFTs, and Social.",
+  "type": "Hackathon",
+  "price": "Free",
+  "status": "upcoming",
+  "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/hackathon-2025.jpg",
+  "registrationUrl": "https://basehackathon.devpost.com"
+}
+
+### Update Event
+PUT {{baseUrl}}/events/{{eventId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "attendees": 7500,
+  "price": "$349",
+  "description": "Updated: The premier Web3 conference now with expanded tracks and more speakers!"
+}
+
+### Delete Event
+DELETE {{baseUrl}}/events/{{eventId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### CREATORS
+### ==========================================
+
+### Get All Creators (Public)
+GET {{baseUrl}}/creators
+
+### Get Creators with Pagination
+GET {{baseUrl}}/creators?page=1&limit=10
+
+### Get Single Creator by ID
+GET {{baseUrl}}/creators/{{creatorId}}
+
+### Create Creator (Admin Only)
+# @name createCreator
+POST {{baseUrl}}/creators
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Alex Rivers",
+  "bio": "Web3 content creator and educator. Building the future of decentralized media. Former Google engineer turned full-time crypto builder.",
+  "profileImage": "https://res.cloudinary.com/demo/image/upload/v1/creators/alex-rivers.jpg",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/alexrivers"
+    },
+    {
+      "platform": "youtube",
+      "url": "https://youtube.com/@alexrivers"
+    },
+    {
+      "platform": "github",
+      "url": "https://github.com/alexrivers"
+    }
+  ],
+  "creatorCoin": {
+    "symbol": "ALEX",
+    "marketCap": 2500000,
+    "price": 12.50,
+    "change24h": 5.2
+  },
+  "followers": "125K"
+}
+
+@creatorId = {{createCreator.response.body.data.id}}
+
+### Create Another Creator
+POST {{baseUrl}}/creators
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Sarah Chen",
+  "bio": "DeFi researcher and protocol designer. Contributing to multiple Base ecosystem projects. Passionate about financial inclusion through blockchain.",
+  "profileImage": "https://res.cloudinary.com/demo/image/upload/v1/creators/sarah-chen.jpg",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/sarahchen_defi"
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://linkedin.com/in/sarahchen"
+    },
+    {
+      "platform": "mirror",
+      "url": "https://mirror.xyz/sarahchen.eth"
+    }
+  ],
+  "creatorCoin": {
+    "symbol": "SARAH",
+    "marketCap": 1800000,
+    "price": 8.75,
+    "change24h": -2.1
+  },
+  "followers": "89K"
+}
+
+### Create Third Creator
+POST {{baseUrl}}/creators
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Marcus Webb",
+  "bio": "NFT artist and digital sculptor. Creating immersive 3D experiences on Base. Featured in Art Basel Miami 2024.",
+  "profileImage": "https://res.cloudinary.com/demo/image/upload/v1/creators/marcus-webb.jpg",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/marcuswebb3d"
+    },
+    {
+      "platform": "instagram",
+      "url": "https://instagram.com/marcuswebb3d"
+    },
+    {
+      "platform": "opensea",
+      "url": "https://opensea.io/marcuswebb"
+    }
+  ],
+  "creatorCoin": {
+    "symbol": "WEBB",
+    "marketCap": 950000,
+    "price": 4.25,
+    "change24h": 12.8
+  },
+  "followers": "45K"
+}
+
+### Update Creator
+PUT {{baseUrl}}/creators/{{creatorId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "followers": "150K",
+  "creatorCoin": {
+    "symbol": "ALEX",
+    "marketCap": 3200000,
+    "price": 15.00,
+    "change24h": 8.5
+  }
+}
+
+### Delete Creator
+DELETE {{baseUrl}}/creators/{{creatorId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### BUILDER PROJECTS
+### ==========================================
+
+### Get All Builder Projects (Public)
+GET {{baseUrl}}/builders/projects
+
+### Get Projects with Pagination
+GET {{baseUrl}}/builders/projects?page=1&limit=10
+
+### Get Single Project by ID
+GET {{baseUrl}}/builders/projects/{{projectId}}
+
+### Create Builder Project (Admin Only)
+# @name createProject
+POST {{baseUrl}}/builders/projects
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "BaseSwap DEX",
+  "creator": "BaseSwap Team",
+  "description": "The leading decentralized exchange on Base with concentrated liquidity, limit orders, and yield farming. Trade any token with minimal slippage and lowest fees.",
+  "tech": ["Solidity", "React", "TypeScript", "The Graph", "Uniswap V3"],
+  "status": "Live",
+  "users": "150K+",
+  "tvl": "$85M",
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/projects/baseswap.jpg",
+  "githubUrl": "https://github.com/baseswap-fi/baseswap-core",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/baseswap"
+    },
+    {
+      "platform": "discord",
+      "url": "https://discord.gg/baseswap"
+    },
+    {
+      "platform": "telegram",
+      "url": "https://t.me/baseswap"
+    }
+  ],
+  "websiteUrl": "https://baseswap.fi"
+}
+
+@projectId = {{createProject.response.body.data.id}}
+
+### Create Another Project - NFT Marketplace
+POST {{baseUrl}}/builders/projects
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "BasePunks Marketplace",
+  "creator": "BasePunks DAO",
+  "description": "Community-owned NFT marketplace featuring zero platform fees, creator royalties enforcement, and gasless listings. Built by the community, for the community.",
+  "tech": ["Solidity", "Next.js", "IPFS", "Reservoir API"],
+  "status": "Live",
+  "users": "45K+",
+  "tvl": "$12M",
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/projects/basepunks.jpg",
+  "githubUrl": "https://github.com/basepunks/marketplace",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/basepunks"
+    },
+    {
+      "platform": "discord",
+      "url": "https://discord.gg/basepunks"
+    }
+  ],
+  "websiteUrl": "https://basepunks.market"
+}
+
+### Create Project - Lending Protocol
+POST {{baseUrl}}/builders/projects
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "BaseLend",
+  "creator": "BaseLend Labs",
+  "description": "Decentralized lending protocol enabling users to earn interest on deposits and borrow assets. Features isolated lending markets and flash loans.",
+  "tech": ["Solidity", "Hardhat", "React", "Chainlink Oracles"],
+  "status": "Beta",
+  "users": "25K+",
+  "tvl": "$45M",
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/projects/baselend.jpg",
+  "githubUrl": "https://github.com/baselend/protocol",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/baselend"
+    },
+    {
+      "platform": "discord",
+      "url": "https://discord.gg/baselend"
+    },
+    {
+      "platform": "github",
+      "url": "https://github.com/baselend"
+    }
+  ],
+  "websiteUrl": "https://baselend.xyz"
+}
+
+### Create Project - In Development
+POST {{baseUrl}}/builders/projects
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "BaseID",
+  "creator": "Identity Labs",
+  "description": "Decentralized identity solution for Base. Soulbound tokens, verifiable credentials, and privacy-preserving KYC. Building the identity layer for Web3.",
+  "tech": ["Solidity", "Zero Knowledge Proofs", "Ceramic", "Next.js"],
+  "status": "Development",
+  "users": "5K+",
+  "tvl": "$0",
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/projects/baseid.jpg",
+  "githubUrl": "https://github.com/identity-labs/baseid",
+  "socialMedia": [
+    {
+      "platform": "twitter",
+      "url": "https://twitter.com/baseid_xyz"
+    }
+  ],
+  "websiteUrl": "https://baseid.xyz"
+}
+
+### Update Builder Project
+PUT {{baseUrl}}/builders/projects/{{projectId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "users": "200K+",
+  "tvl": "$120M",
+  "tech": ["Solidity", "React", "TypeScript", "The Graph", "Uniswap V3", "Chainlink"]
+}
+
+### Delete Builder Project
+DELETE {{baseUrl}}/builders/projects/{{projectId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### RESOURCES
+### ==========================================
+
+### Get All Resources (Public)
+GET {{baseUrl}}/resources
+
+### Get Resources with Filters
+GET {{baseUrl}}/resources?category=Smart%20Contracts&type=Tutorial&level=Beginner&limit=10
+
+### Search Resources
+GET {{baseUrl}}/resources?search=solidity&limit=10
+
+### Get Featured Resources
+GET {{baseUrl}}/resources?featured=true
+
+### Get Resource by Slug
+GET {{baseUrl}}/resources/slug/introduction-to-base
+
+### Get Resource by ID
+GET {{baseUrl}}/resources/{{resourceId}}
+
+### Create Resource - Tutorial (Admin Only)
+# @name createResource
+POST {{baseUrl}}/resources
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Introduction to Base",
+  "description": "A comprehensive guide to getting started with Base, the secure, low-cost, builder-friendly Ethereum L2. Learn about the architecture, tooling, and how to deploy your first smart contract.",
+  "type": "Tutorial",
+  "category": "Getting Started",
+  "level": "Beginner",
+  "duration": "45 mins",
+  "author": "Base Team",
+  "rating": 4.9,
+  "students": 15000,
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/resources/intro-base.jpg",
+  "resourceUrl": "https://docs.base.org/getting-started",
+  "provider": "Base Documentation",
+  "tags": ["Base", "Ethereum", "L2", "Getting Started", "Blockchain"],
+  "featured": true
+}
+
+@resourceId = {{createResource.response.body.data.id}}
+
+### Create Resource - Documentation
+POST {{baseUrl}}/resources
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Solidity Smart Contract Security",
+  "description": "In-depth documentation covering smart contract security best practices, common vulnerabilities like reentrancy and flash loan attacks, and how to write secure code.",
+  "type": "Documentation",
+  "category": "Smart Contracts",
+  "level": "Advanced",
+  "duration": "2 hours",
+  "author": "OpenZeppelin",
+  "rating": 4.8,
+  "students": 8500,
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/resources/security-docs.jpg",
+  "resourceUrl": "https://docs.openzeppelin.com/contracts/security",
+  "provider": "OpenZeppelin",
+  "tags": ["Security", "Solidity", "Smart Contracts", "Auditing", "Best Practices"],
+  "featured": true
+}
+
+### Create Resource - Video Course
+POST {{baseUrl}}/resources
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Build a DeFi Protocol from Scratch",
+  "description": "Video course walking through building a complete DeFi lending protocol. Covers smart contract development, frontend integration, and deployment to Base.",
+  "type": "Video",
+  "category": "DeFi",
+  "level": "Intermediate",
+  "duration": "6 hours",
+  "author": "Patrick Collins",
+  "rating": 4.9,
+  "students": 12000,
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/resources/defi-course.jpg",
+  "resourceUrl": "https://www.youtube.com/playlist?list=PLxxxxxxx",
+  "provider": "YouTube",
+  "tags": ["DeFi", "Lending", "Solidity", "Video Course", "Base"],
+  "featured": false
+}
+
+### Create Resource - Development Tool
+POST {{baseUrl}}/resources
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Hardhat Development Environment",
+  "description": "Professional development environment for compiling, deploying, testing, and debugging Ethereum and Base smart contracts. Essential tool for any Solidity developer.",
+  "type": "Tool",
+  "category": "Development Tools",
+  "level": "All Levels",
+  "duration": "N/A",
+  "author": "Nomic Foundation",
+  "rating": 4.9,
+  "students": 50000,
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/resources/hardhat.jpg",
+  "resourceUrl": "https://hardhat.org",
+  "provider": "Nomic Foundation",
+  "tags": ["Hardhat", "Development", "Testing", "Deployment", "Solidity"],
+  "featured": true
+}
+
+### Create Resource - NFT Tutorial
+POST {{baseUrl}}/resources
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Creating NFT Collections on Base",
+  "description": "Step-by-step tutorial for creating and deploying NFT collections on Base. Covers ERC-721, metadata, IPFS storage, and marketplace integration.",
+  "type": "Tutorial",
+  "category": "NFTs",
+  "level": "Intermediate",
+  "duration": "90 mins",
+  "author": "Web3 Economy Team",
+  "rating": 4.7,
+  "students": 6800,
+  "image": "https://res.cloudinary.com/demo/image/upload/v1/resources/nft-tutorial.jpg",
+  "resourceUrl": "https://web3economy.com/tutorials/nft-collections",
+  "provider": "Web3 Economy",
+  "tags": ["NFT", "ERC-721", "IPFS", "Base", "Tutorial"],
+  "featured": false
+}
+
+### Update Resource
+PUT {{baseUrl}}/resources/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "students": 18000,
+  "rating": 4.95,
+  "description": "Updated: A comprehensive guide to getting started with Base - now with new sections on bridging and gas optimization!"
+}
+
+### Track Resource Download (Public)
+POST {{baseUrl}}/resources/{{resourceId}}/download
+Content-Type: application/json
+
+{
+  "ipAddress": "192.168.1.1"
+}
+
+### Delete Resource
+DELETE {{baseUrl}}/resources/{{resourceId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### CONTACT FORM
+### ==========================================
+
+### Submit Contact Form (Public)
+POST {{baseUrl}}/contact
+Content-Type: application/json
+
+{
+  "fullName": "John Smith",
+  "email": "john.smith@example.com",
+  "company": "Acme Corp",
+  "subject": "Partnership Inquiry",
+  "message": "Hello, I'm interested in exploring partnership opportunities with Web3 Economy. Our company is building on Base and we'd love to discuss potential collaboration.",
+  "subscribeNewsletter": true
+}
+
+### Submit Contact Form - Without Company
+POST {{baseUrl}}/contact
+Content-Type: application/json
+
+{
+  "fullName": "Jane Doe",
+  "email": "jane.doe@email.com",
+  "subject": "Technical Support",
+  "message": "I'm having trouble connecting my wallet to your platform. Can someone help me troubleshoot this issue?",
+  "subscribeNewsletter": false
+}
+
+### Submit Contact Form - Developer Inquiry
+POST {{baseUrl}}/contact
+Content-Type: application/json
+
+{
+  "fullName": "Mike Developer",
+  "email": "mike@startup.io",
+  "company": "Startup.io",
+  "subject": "API Access Request",
+  "message": "We're building a dApp on Base and would like to integrate with your platform's API. Could you provide documentation and potential access?",
+  "subscribeNewsletter": true
+}
+
+### Get All Contact Submissions (Admin Only)
+GET {{baseUrl}}/contact
+Authorization: Bearer {{adminToken}}
+
+### Get Contact Submissions with Pagination
+GET {{baseUrl}}/contact?page=1&limit=10
+Authorization: Bearer {{adminToken}}
+
+### Get Single Contact Submission (Admin Only)
+GET {{baseUrl}}/contact/{{contactId}}
+Authorization: Bearer {{adminToken}}
+
+### Delete Contact Submission (Admin Only)
+DELETE {{baseUrl}}/contact/{{contactId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### NEWSLETTER
+### ==========================================
+
+### Subscribe to Newsletter (Public)
+POST {{baseUrl}}/newsletter/subscribe
+Content-Type: application/json
+
+{
+  "email": "subscriber@example.com",
+  "source": "homepage_footer"
+}
+
+### Subscribe - From Blog
+POST {{baseUrl}}/newsletter/subscribe
+Content-Type: application/json
+
+{
+  "email": "reader@blog.com",
+  "source": "blog_sidebar"
+}
+
+### Subscribe - From Contact Form
+POST {{baseUrl}}/newsletter/subscribe
+Content-Type: application/json
+
+{
+  "email": "contact@company.com",
+  "source": "contact_form"
+}
+
+### Subscribe - From Event Page
+POST {{baseUrl}}/newsletter/subscribe
+Content-Type: application/json
+
+{
+  "email": "attendee@events.com",
+  "source": "event_page"
+}
+
+### Unsubscribe from Newsletter (Public)
+POST {{baseUrl}}/newsletter/unsubscribe
+Content-Type: application/json
+
+{
+  "email": "subscriber@example.com"
+}
+
+### Get All Newsletter Subscribers (Admin Only)
+GET {{baseUrl}}/newsletter/subscribers
+Authorization: Bearer {{adminToken}}
+
+### Get Subscribers with Filters
+GET {{baseUrl}}/newsletter/subscribers?status=active&page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### Delete Newsletter Subscriber (Admin Only)
+DELETE {{baseUrl}}/newsletter/subscribers/{{subscriberId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### ERROR TESTING SCENARIOS
+### ==========================================
+
+### Test 401 - Missing Auth Token
+POST {{baseUrl}}/events
+Content-Type: application/json
+
+{
+  "title": "Test Event"
+}
+
+### Test 401 - Invalid Auth Token
+POST {{baseUrl}}/events
+Authorization: Bearer invalid_token_here
+Content-Type: application/json
+
+{
+  "title": "Test Event"
+}
+
+### Test 400 - Invalid Event Data (Missing Required Fields)
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Incomplete Event"
+}
+
+### Test 400 - Invalid Email Format (Contact Form)
+POST {{baseUrl}}/contact
+Content-Type: application/json
+
+{
+  "fullName": "Test User",
+  "email": "not-an-email",
+  "subject": "Test",
+  "message": "Test message"
+}
+
+### Test 400 - Invalid Email Format (Newsletter)
+POST {{baseUrl}}/newsletter/subscribe
+Content-Type: application/json
+
+{
+  "email": "invalid-email"
+}
+
+### Test 404 - Non-existent Event
+GET {{baseUrl}}/events/507f1f77bcf86cd799439011
+
+### Test 404 - Non-existent Resource Slug
+GET {{baseUrl}}/resources/slug/this-does-not-exist
+
+### Test 409 - Duplicate Newsletter Subscription
+### (Run this twice to see duplicate error)
+POST {{baseUrl}}/newsletter/subscribe
+Content-Type: application/json
+
+{
+  "email": "duplicate@test.com",
+  "source": "test"
+}
+
+### ==========================================
+### BATCH TESTING - CREATE SAMPLE DATA
+### ==========================================
+
+### Quick Setup: Create Multiple Events
+### Event 1 - Webinar
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Base Protocol Deep Dive Webinar",
+  "date": "January 10, 2025",
+  "location": "Online",
+  "attendees": 500,
+  "description": "Technical deep dive into Base protocol architecture with the core team.",
+  "type": "Webinar",
+  "price": "Free",
+  "status": "upcoming",
+  "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/webinar.jpg",
+  "registrationUrl": "https://web3economy.com/webinar"
+}
+
+### Event 2 - Past Event
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "ETH Denver 2024 - Base Track",
+  "date": "February 23-March 3, 2024",
+  "location": "Denver, CO",
+  "attendees": 3500,
+  "description": "Base sponsored track at ETH Denver 2024 featuring workshops and bounties.",
+  "type": "Conference",
+  "price": "$399",
+  "status": "past",
+  "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/ethdenver.jpg"
+}
+
+### Event 3 - Live Event
+POST {{baseUrl}}/events
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Base Builder Office Hours",
+  "date": "Every Wednesday",
+  "location": "Discord",
+  "attendees": 150,
+  "description": "Weekly office hours with the Base developer relations team. Bring your questions!",
+  "type": "Meetup",
+  "price": "Free",
+  "status": "live",
+  "bannerImage": "https://res.cloudinary.com/demo/image/upload/v1/events/office-hours.jpg",
+  "registrationUrl": "https://discord.gg/base"
+}
+
+### ==========================================
+### BLOG ENDPOINTS
+### ==========================================
+
+### Get All Published Blogs
+GET {{baseUrl}}/blogs
+
+### Get All Blogs with Pagination
+GET {{baseUrl}}/blogs?page=1&limit=10
+
+### Get Blogs by Category
+GET {{baseUrl}}/blogs?category=Tutorial
+
+### Get Blogs by Tag
+GET {{baseUrl}}/blogs?tag=DeFi
+
+### Search Blogs
+GET {{baseUrl}}/blogs?search=ethereum
+
+### Get Featured Blogs Only
+GET {{baseUrl}}/blogs?featured=true
+
+### Get Featured Blog Post
+GET {{baseUrl}}/blogs/featured
+
+### Get Blog Categories with Counts
+GET {{baseUrl}}/blogs/categories
+
+### Get Trending Topics
+GET {{baseUrl}}/blogs/trending
+
+### Get Blog by Slug
+GET {{baseUrl}}/blogs/slug/getting-started-with-base-layer-2
+
+### Get Related Blogs
+GET {{baseUrl}}/blogs/slug/getting-started-with-base-layer-2/related
+
+### Get Blog by ID
+GET {{baseUrl}}/blogs/{{blogId}}
+
+### Like a Blog Post
+POST {{baseUrl}}/blogs/{{blogId}}/like
+
+### Bookmark a Blog Post
+POST {{baseUrl}}/blogs/{{blogId}}/bookmark
+
+### Get All Blogs (Admin - includes unpublished)
+GET {{baseUrl}}/blogs/admin/all
+Authorization: Bearer {{adminToken}}
+
+### Get All Blogs (Admin) with Filters
+GET {{baseUrl}}/blogs/admin/all?published=false&page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### Create New Blog Post (Admin)
+# @name createBlog
+POST {{baseUrl}}/blogs
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Getting Started with Base Layer 2",
+  "excerpt": "Learn how to deploy your first smart contract on Base, Coinbase's Layer 2 solution built on the OP Stack.",
+  "content": "# Getting Started with Base Layer 2\n\nBase is an Ethereum Layer 2 (L2) built on the OP Stack. It provides a secure, low-cost, and developer-friendly environment for building decentralized applications.\n\n## What is Base?\n\nBase is built on Optimism's OP Stack and offers:\n- Low transaction fees\n- Fast transaction confirmation\n- EVM compatibility\n- Access to Coinbase's ecosystem\n\n## Setting Up Your Development Environment\n\nFirst, install the required dependencies:\n\n```bash\nnpm install hardhat @nomiclabs/hardhat-ethers ethers\n```\n\n## Deploying Your First Contract\n\nCreate a simple contract and deploy it to Base testnet...",
+  "author": {
+    "name": "Base Team",
+    "role": "Developer Relations",
+    "bio": "Official content from the Base developer relations team.",
+    "avatar": "https://example.com/avatars/base-team.png"
+  },
+  "category": "Tutorial",
+  "image": "https://example.com/images/base-tutorial.jpg",
+  "tags": ["Base", "Layer 2", "Smart Contracts", "Ethereum", "Web3"],
+  "featured": true,
+  "published": true,
+  "color": "from-blue-500 to-purple-600"
+}
+
+### Create Blog Post - News Category
+POST {{baseUrl}}/blogs
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Base Mainnet Hits 1 Million Daily Transactions",
+  "excerpt": "Base achieves a major milestone as daily transaction volume surpasses 1 million, showcasing growing adoption.",
+  "content": "# Base Mainnet Hits 1 Million Daily Transactions\n\nBase, the Layer 2 network incubated by Coinbase, has achieved a significant milestone by processing over 1 million daily transactions...\n\n## Growing Ecosystem\n\nThe growth is attributed to:\n- Increasing DeFi activity\n- NFT marketplace launches\n- Gaming applications\n- Social apps like Friend.tech\n\n## What This Means for Developers\n\nWith increasing adoption, developers have more opportunities to build and reach users on Base.",
+  "author": {
+    "name": "Sarah Chen",
+    "role": "Blockchain Journalist",
+    "bio": "Covering the latest in blockchain and cryptocurrency.",
+    "avatar": "https://example.com/avatars/sarah.png"
+  },
+  "category": "News",
+  "image": "https://example.com/images/base-milestone.jpg",
+  "tags": ["Base", "Milestone", "Transactions", "Growth"],
+  "featured": false,
+  "published": true,
+  "color": "from-green-500 to-teal-600"
+}
+
+### Create Blog Post - Guide Category
+POST {{baseUrl}}/blogs
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Complete Guide to Building DeFi Apps on Base",
+  "excerpt": "A comprehensive guide to building decentralized finance applications on Base with best practices and security considerations.",
+  "content": "# Complete Guide to Building DeFi Apps on Base\n\nThis guide covers everything you need to know to build secure and efficient DeFi applications on Base...\n\n## Prerequisites\n\n- Solidity knowledge\n- Understanding of DeFi concepts\n- Development environment setup\n\n## Security Best Practices\n\n1. Always audit your contracts\n2. Use OpenZeppelin libraries\n3. Implement proper access controls\n4. Handle edge cases\n\n## Deployment Strategy\n\nStart with testnets and gradually move to mainnet...",
+  "author": {
+    "name": "Alex Rivera",
+    "role": "Senior Developer",
+    "bio": "Building the future of DeFi on Base.",
+    "avatar": "https://example.com/avatars/alex.png"
+  },
+  "category": "Guide",
+  "image": "https://example.com/images/defi-guide.jpg",
+  "tags": ["DeFi", "Base", "Development", "Smart Contracts", "Security"],
+  "featured": false,
+  "published": true,
+  "color": "from-purple-500 to-pink-600"
+}
+
+### Create Blog Post - Industry News
+POST {{baseUrl}}/blogs
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Coinbase Q4 2024: Base Drives Significant Revenue Growth",
+  "excerpt": "Coinbase reports strong Q4 results with Base contributing significantly to the company's revenue growth and user acquisition.",
+  "content": "# Coinbase Q4 2024: Base Drives Significant Revenue Growth\n\nIn their Q4 2024 earnings report, Coinbase highlighted Base as a major driver of growth...\n\n## Key Highlights\n\n- Transaction volume increased 300%\n- Developer activity up 200%\n- TVL reached $2B\n\n## Looking Ahead\n\nCoinbase plans to continue investing in Base infrastructure and developer tools.",
+  "author": {
+    "name": "Market Watch",
+    "role": "Industry Analyst",
+    "bio": "Tracking market trends in the crypto industry.",
+    "avatar": "https://example.com/avatars/marketwatch.png"
+  },
+  "category": "Industry News",
+  "image": "https://example.com/images/coinbase-q4.jpg",
+  "tags": ["Coinbase", "Base", "Earnings", "Growth", "Industry"],
+  "featured": false,
+  "published": true,
+  "color": "from-yellow-500 to-orange-600"
+}
+
+### Create Draft Blog Post (unpublished)
+POST {{baseUrl}}/blogs
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Upcoming Feature: Base Native Bridges",
+  "excerpt": "Preview of upcoming native bridge features for Base.",
+  "content": "# Upcoming Feature: Base Native Bridges\n\nThis is a draft post about upcoming features...",
+  "author": {
+    "name": "Base Team",
+    "role": "Product Manager",
+    "avatar": "https://example.com/avatars/base-team.png"
+  },
+  "category": "Updates",
+  "image": "https://example.com/images/bridges.jpg",
+  "tags": ["Base", "Bridges", "Updates"],
+  "featured": false,
+  "published": false,
+  "color": "from-gray-500 to-gray-600"
+}
+
+### Update Blog Post (Admin)
+PUT {{baseUrl}}/blogs/{{blogId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Getting Started with Base Layer 2 - Updated",
+  "excerpt": "Updated guide: Learn how to deploy your first smart contract on Base, Coinbase's Layer 2 solution built on the OP Stack.",
+  "featured": true,
+  "tags": ["Base", "Layer 2", "Smart Contracts", "Ethereum", "Web3", "Beginner Friendly"]
+}
+
+### Toggle Blog Published Status (Admin)
+PUT {{baseUrl}}/blogs/{{blogId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "published": true
+}
+
+### Set Blog as Featured (Admin)
+PUT {{baseUrl}}/blogs/{{blogId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "featured": true
+}
+
+### Delete Blog Post (Admin)
+DELETE {{baseUrl}}/blogs/{{blogId}}
+Authorization: Bearer {{adminToken}}
+
+### ==========================================
+### SHOWCASE ENDPOINTS
+### ==========================================
+
+### Get All Published Showcase Projects
+GET {{baseUrl}}/showcase
+
+### Get Showcase Projects with Pagination
+GET {{baseUrl}}/showcase?page=1&limit=12
+
+### Get Showcase Projects by Category
+GET {{baseUrl}}/showcase?category=DeFi
+
+### Get Showcase Projects by Tag
+GET {{baseUrl}}/showcase?tag=Solidity
+
+### Search Showcase Projects
+GET {{baseUrl}}/showcase?search=protocol
+
+### Get Featured Projects Filter
+GET {{baseUrl}}/showcase?filter=featured
+
+### Get Trending Projects Filter
+GET {{baseUrl}}/showcase?filter=trending
+
+### Get New Projects Filter
+GET {{baseUrl}}/showcase?filter=new
+
+### Get Popular Projects Filter (sorted by stars)
+GET {{baseUrl}}/showcase?filter=popular
+
+### Get Showcase Categories with Counts
+GET {{baseUrl}}/showcase/categories
+
+### Get Showcase Statistics
+GET {{baseUrl}}/showcase/stats
+
+### Get Featured Projects
+GET {{baseUrl}}/showcase/featured
+
+### Get Featured Projects with Limit
+GET {{baseUrl}}/showcase/featured?limit=4
+
+### Get Trending Projects
+GET {{baseUrl}}/showcase/trending
+
+### Get Trending Projects with Limit
+GET {{baseUrl}}/showcase/trending?limit=4
+
+### Get Project by Slug
+GET {{baseUrl}}/showcase/slug/yieldvault-protocol
+
+### Get Project by ID
+GET {{baseUrl}}/showcase/{{showcaseId}}
+
+### Star a Project
+POST {{baseUrl}}/showcase/{{showcaseId}}/star
+
+### Get All Projects (Admin - includes unpublished)
+GET {{baseUrl}}/showcase/admin/all
+Authorization: Bearer {{adminToken}}
+
+### Get All Projects (Admin) with Filters
+GET {{baseUrl}}/showcase/admin/all?published=false&category=DeFi&page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### Create Showcase Project (Admin) - DeFi
+# @name createShowcase
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "YieldVault Protocol",
+  "description": "Automated yield optimization protocol that maximizes returns across multiple DeFi platforms with smart rebalancing algorithms.",
+  "category": "DeFi",
+  "creator": "Alex Chen",
+  "image": "https://example.com/images/yieldvault.jpg",
+  "tags": ["Solidity", "React", "Web3.js"],
+  "stats": {
+    "stars": 1245,
+    "users": "50K+",
+    "tvl": "$25M"
+  },
+  "links": {
+    "website": "https://yieldvault.io",
+    "github": "https://github.com/yieldvault/protocol",
+    "twitter": "https://twitter.com/yieldvault",
+    "discord": "https://discord.gg/yieldvault",
+    "documentation": "https://docs.yieldvault.io"
+  },
+  "featured": true,
+  "trending": true,
+  "color": "mint",
+  "published": true
+}
+
+### Create Showcase Project (Admin) - NFT
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "MetaGallery",
+  "description": "Next-generation NFT marketplace with social features, creator tools, and cross-chain support for digital art and collectibles.",
+  "category": "NFT",
+  "creator": "Sarah Williams",
+  "image": "https://example.com/images/metagallery.jpg",
+  "tags": ["Next.js", "IPFS", "Ethereum"],
+  "stats": {
+    "stars": 2156,
+    "users": "100K+",
+    "tvl": "$15M"
+  },
+  "links": {
+    "website": "https://metagallery.art",
+    "github": "https://github.com/metagallery/app"
+  },
+  "featured": true,
+  "trending": false,
+  "color": "gold",
+  "published": true
+}
+
+### Create Showcase Project (Admin) - DAO
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "GovernHub",
+  "description": "Comprehensive governance platform for DAOs with advanced voting mechanisms, proposal management, and treasury controls.",
+  "category": "DAO",
+  "creator": "Marcus Rodriguez",
+  "image": "https://example.com/images/governhub.jpg",
+  "tags": ["React", "GraphQL", "Arbitrum"],
+  "stats": {
+    "stars": 892,
+    "users": "25K+",
+    "tvl": "$8M"
+  },
+  "links": {
+    "website": "https://governhub.xyz",
+    "github": "https://github.com/governhub/platform"
+  },
+  "featured": false,
+  "trending": true,
+  "color": "mint",
+  "published": true
+}
+
+### Create Showcase Project (Admin) - GameFi
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "ChainQuest",
+  "description": "Blockchain-based RPG game enabling true digital ownership of in-game assets with play-to-earn mechanics.",
+  "category": "GameFi",
+  "creator": "Elena Petrov",
+  "image": "https://example.com/images/chainquest.jpg",
+  "tags": ["Unity", "Solidity", "Polygon"],
+  "stats": {
+    "stars": 3421,
+    "users": "75K+",
+    "tvl": "$40M"
+  },
+  "links": {
+    "website": "https://chainquest.game",
+    "github": "https://github.com/chainquest/game",
+    "discord": "https://discord.gg/chainquest"
+  },
+  "featured": true,
+  "trending": true,
+  "color": "gold",
+  "published": true
+}
+
+### Create Showcase Project (Admin) - Infrastructure
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "BridgeX Protocol",
+  "description": "Seamless cross-chain bridge enabling secure asset transfers between multiple blockchain networks with minimal fees.",
+  "category": "Infrastructure",
+  "creator": "David Kim",
+  "image": "https://example.com/images/bridgex.jpg",
+  "tags": ["Rust", "TypeScript", "Cosmos SDK"],
+  "stats": {
+    "stars": 1876,
+    "users": "200K+",
+    "tvl": "$100M"
+  },
+  "links": {
+    "website": "https://bridgex.io",
+    "github": "https://github.com/bridgex/protocol",
+    "documentation": "https://docs.bridgex.io"
+  },
+  "featured": true,
+  "trending": false,
+  "color": "mint",
+  "published": true
+}
+
+### Create Showcase Project (Admin) - Infrastructure (ZK)
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "PrivacyShield",
+  "description": "Zero-knowledge proof system for private transactions on public blockchains, ensuring complete transaction anonymity.",
+  "category": "Infrastructure",
+  "creator": "Lisa Thompson",
+  "image": "https://example.com/images/privacyshield.jpg",
+  "tags": ["Circom", "SnarkJS", "Ethereum"],
+  "stats": {
+    "stars": 654,
+    "users": "10K+",
+    "tvl": "$5M"
+  },
+  "links": {
+    "website": "https://privacyshield.xyz",
+    "github": "https://github.com/privacyshield/core"
+  },
+  "featured": false,
+  "trending": false,
+  "color": "gold",
+  "published": true
+}
+
+### Create Showcase Project (Admin) - Draft (unpublished)
+POST {{baseUrl}}/showcase
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "Upcoming Project X",
+  "description": "This is a draft project that will be published later.",
+  "category": "DeFi",
+  "creator": "Anonymous",
+  "image": "https://example.com/images/draft.jpg",
+  "tags": ["Solidity", "Base"],
+  "featured": false,
+  "trending": false,
+  "color": "mint",
+  "published": false
+}
+
+### Update Showcase Project (Admin)
+PUT {{baseUrl}}/showcase/{{showcaseId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "title": "YieldVault Protocol v2",
+  "description": "Updated: Automated yield optimization protocol with enhanced features and multi-chain support.",
+  "stats": {
+    "stars": 1500,
+    "users": "60K+",
+    "tvl": "$30M"
+  },
+  "tags": ["Solidity", "React", "Web3.js", "Multi-chain"]
+}
+
+### Toggle Project Featured Status (Admin)
+PUT {{baseUrl}}/showcase/{{showcaseId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "featured": true
+}
+
+### Toggle Project Trending Status (Admin)
+PUT {{baseUrl}}/showcase/{{showcaseId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "trending": true
+}
+
+### Publish Project (Admin)
+PUT {{baseUrl}}/showcase/{{showcaseId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "published": true
+}
+
+### Delete Showcase Project (Admin)
+DELETE {{baseUrl}}/showcase/{{showcaseId}}
+Authorization: Bearer {{adminToken}}

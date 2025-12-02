@@ -1,0 +1,9 @@
+export { default as adminRoutes } from './adminRoutes';
+export { default as eventRoutes } from './eventRoutes';
+export { default as creatorRoutes } from './creatorRoutes';
+export { default as builderRoutes } from './builderRoutes';
+export { default as resourceRoutes } from './resourceRoutes';
+export { default as contactRoutes } from './contactRoutes';
+export { default as newsletterRoutes } from './newsletterRoutes';
+export { default as blogRoutes } from './blogRoutes';
+export { default as showcaseRoutes } from './showcaseRoutes';

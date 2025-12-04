@@ -4,9 +4,10 @@ const allowedOrigins =
   process.env.NODE_ENV === 'production'
     ? ['https://web3economy.com', 'https://www.web3economy.com']
     : [
-        'http://localhost:3000',
+        'http://localhost:8081',
+        'http://localhost:8080',
         'http://localhost:5173',
-        'http://127.0.0.1:3000',
+        'http://127.0.0.1:8080',
         'http://127.0.0.1:5173',
       ];
 

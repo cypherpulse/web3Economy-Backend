@@ -94,7 +94,6 @@ const BlogSchema = new Schema<IBlog>(
     },
     slug: {
       type: String,
-      required: true,
       unique: true,
       lowercase: true,
     },
@@ -118,7 +117,6 @@ const BlogSchema = new Schema<IBlog>(
     },
     readTime: {
       type: String,
-      required: [true, 'Read time is required'],
     },
     category: {
       type: String,
@@ -153,7 +151,6 @@ const BlogSchema = new Schema<IBlog>(
     },
     color: {
       type: String,
-      enum: ['mint', 'gold'],
     },
   },
   {

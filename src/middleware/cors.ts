@@ -2,7 +2,7 @@ import cors from 'cors';
 
 const allowedOrigins =
   process.env.NODE_ENV === 'production'
-    ? ['https://web3economy.com', 'https://www.web3economy.com']
+    ? ['https://web3economy.xyz', 'https://www.web3economy.xyz']
     : [
         'http://localhost:8081',
         'http://localhost:8080',

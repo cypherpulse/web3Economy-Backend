@@ -1,8 +1,7 @@
 ### Web3 Economy Backend API Testing
 ### Base URL
 @baseUrl = http://localhost:3001/api
-@adminToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmYzYWZiNjM5MDhjYjQ2NzE1ZWI4NiIsImVtYWlsIjoiam9obmJyYWRpbGw2N0BnbWFpbC5jb20iLCJpYXQiOjE3NjQ3MDMxNjAsImV4cCI6MTc2NTMwNzk2MH0.MFmTEeIfuc3QMynA0H2Wgv_bG5Hb993DK0nPMQGOCj8
-@blogId = {{createBlog.response.body.data._id}}
+@adminToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmYzYWZiNjM5MDhjYjQ2NzE1ZWI4NiIsImVtYWlsIjoiam9obmJyYWRpbGw2N0BnbWFpbC5jb20iLCJpYXQiOjE3NjU1NzM5ODMsImV4cCI6MTc2NjE3ODc4M30.2ojqzhMfGm2FKXmqMVDMkL6QZSsqijskzWYapcwkLe0
 @showcaseId = {{createShowcase.response.body.data._id}}
 
 ### ==========================================
@@ -607,7 +606,7 @@ Content-Type: application/json
 
 {
   "fullName": "John Smith",
-  "email": "john.smith@example.com",
+  "email": "bradley256jm@gmail.com",
   "company": "Acme Corp",
   "subject": "Partnership Inquiry",
   "message": "Hello, I'm interested in exploring partnership opportunities with Web3 Economy. Our company is building on Base and we'd love to discuss potential collaboration.",
@@ -632,7 +631,7 @@ Content-Type: application/json
 
 {
   "fullName": "Mike Developer",
-  "email": "mike@startup.io",
+  "email": "bradley256jm@gmail.com",
   "company": "Startup.io",
   "subject": "API Access Request",
   "message": "We're building a dApp on Base and would like to integrate with your platform's API. Could you provide documentation and potential access?",

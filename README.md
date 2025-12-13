@@ -1,303 +1,181 @@
-<div align="center">
+# Web3 Economy Backend API
 
-# 🌐 Web3 Economy Backend
+A robust, production-ready backend API for the Web3 Economy platform built with TypeScript, Express.js, and MongoDB.
 
-### Empowering the Next Generation of Web3 Builders
+## Features
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4.18-lightgrey?logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
-[![License](https://img.shields.io/badge/License-ISC-yellow.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+- 🔐 **JWT Authentication** - Secure admin authentication with role-based access
+- 📊 **Full CRUD Operations** - Complete API for Events, Creators, Builders, Resources
+- 📧 **Email Service** - Nodemailer integration for contact forms and newsletters
+- 🖼️ **Image Storage** - Cloudinary integration for image uploads
+- 🛡️ **Security** - Helmet, CORS, rate limiting, and input validation
+- 📝 **Validation** - Request validation with express-validator
+- 🗄️ **MongoDB Atlas** - Cloud database with Mongoose ODM
 
-**The backend powering Web3 Economy — a community dedicated to onboarding everyone onchain through education, events, and hands-on building.**
+## Tech Stack
 
-[Getting Started](#-quick-start) • [API Docs](#-api-reference) • [Contributing](#-contributing) • [Community](#-community)
+- **Runtime**: Node.js 18+
+- **Language**: TypeScript 5.0+
+- **Framework**: Express.js 4.18+
+- **Database**: MongoDB Atlas with Mongoose
+- **Authentication**: JWT (jsonwebtoken) + bcryptjs
+- **Email**: Nodemailer
+- **Image Storage**: Cloudinary
+- **Validation**: express-validator
 
-</div>
+## Prerequisites
 
----
+- Node.js 18 or higher
+- MongoDB Atlas account (or local MongoDB)
+- Cloudinary account (for image uploads)
+- SMTP credentials (for email)
 
-## 🎯 About Web3 Economy
+## Installation
 
-**Web3 Economy** is a vibrant Web3 community focused on bringing the next billion users onchain. We believe that blockchain technology should be accessible to everyone, regardless of their technical background.
+1. **Clone the repository**
+   ```bash
+   cd web3Economy-Backend
+   ```
 
-### Our Mission
-- 🎓 **Education First** — Comprehensive learning resources for all skill levels
-- 🎪 **Community Events** — Regular workshops, hackathons, and meetups
-- 🛠️ **Builder Support** — Showcase and support emerging Web3 projects
-- 🌍 **Global Onboarding** — Making Web3 accessible to everyone, everywhere
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-This repository contains the backend API that powers our platform, managing events, educational resources, creator profiles, builder showcases, and community engagement.
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` with your configuration:
+   ```env
+   MONGODB_URI="mongodb+srv://..."
+   JWT_SECRET="your-secret-key"
+   SMTP_HOST="smtp.gmail.com"
+   SMTP_USER="your-email@gmail.com"
+   SMTP_PASS="your-app-password"
+   CLOUDINARY_CLOUD_NAME="your-cloud"
+   CLOUDINARY_API_KEY="your-key"
+   CLOUDINARY_API_SECRET="your-secret"
+   ```
 
----
+4. **Seed the database (optional)**
+   ```bash
+   npm run seed
+   ```
 
-## ✨ Features
+5. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-| Feature | Description |
+## Scripts
+
+| Command | Description |
 |---------|-------------|
-| 🔐 **Secure Authentication** | JWT-based admin auth with role-based access control |
-| 📅 **Event Management** | Full CRUD for community events, workshops & hackathons |
-| 👥 **Creator Profiles** | Showcase community educators and content creators |
-| 🏗️ **Builder Projects** | Highlight innovative Web3 projects from our community |
-| 📚 **Learning Resources** | Curated educational content for all skill levels |
-| 📧 **Email Integration** | Newsletter management and contact form handling |
-| 🖼️ **Media Storage** | Cloudinary integration for image uploads |
-| 🛡️ **Enterprise Security** | Helmet, CORS, rate limiting & input validation |
+| `npm run dev` | Start development server with hot reload |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+| `npm run seed` | Seed database with sample data |
 
----
-
-## 🛠️ Tech Stack
-
-<table>
-<tr>
-<td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=ts" width="48" height="48" alt="TypeScript" />
-<br>TypeScript
-</td>
-<td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=nodejs" width="48" height="48" alt="Node.js" />
-<br>Node.js
-</td>
-<td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=express" width="48" height="48" alt="Express" />
-<br>Express
-</td>
-<td align="center" width="96">
-<img src="https://skillicons.dev/icons?i=mongodb" width="48" height="48" alt="MongoDB" />
-<br>MongoDB
-</td>
-</tr>
-</table>
-
-| Category | Technologies |
-|----------|-------------|
-| **Runtime** | Node.js 18+ |
-| **Language** | TypeScript 5.3+ |
-| **Framework** | Express.js 4.18+ |
-| **Database** | MongoDB Atlas + Mongoose ODM |
-| **Auth** | JWT + bcryptjs |
-| **Email** | Nodemailer |
-| **Storage** | Cloudinary |
-| **Validation** | express-validator + Joi |
-| **Logging** | Winston |
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Node.js** 18.x or higher ([Download](https://nodejs.org/))
-- **pnpm** (recommended) or npm ([Install pnpm](https://pnpm.io/installation))
-- **MongoDB Atlas** account ([Sign up free](https://www.mongodb.com/atlas))
-- **Cloudinary** account ([Sign up free](https://cloudinary.com/))
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/cypherpulse/web3Economy-Backend.git
-cd web3Economy-Backend
-
-# Install dependencies
-pnpm install
-
-# Set up environment variables
-cp .env.example .env
-```
-
-### Configuration
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-# Server
-PORT=3001
-NODE_ENV=development
-
-# Database
-MONGODB_URI=mongodb+srv://your-connection-string
-
-# Authentication
-JWT_SECRET=your-super-secure-jwt-secret-key
-
-# Email (SMTP)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-```
-
-### Running the Application
-
-```bash
-# Development mode (with hot reload)
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
-
-# Seed database with sample data
-pnpm seed
-```
-
-The API will be available at `http://localhost:3001`
-
----
-
-## 📁 Project Structure
-
-```
-web3Economy-Backend/
-├── 📂 src/
-│   ├── 📂 config/           # App & database configuration
-│   ├── 📂 controllers/      # Request handlers & business logic
-│   ├── 📂 middleware/       # Auth, CORS, rate limiting, error handling
-│   ├── 📂 models/           # Mongoose schemas & data models
-│   ├── 📂 routes/           # API route definitions
-│   ├── 📂 services/         # External services (email, Cloudinary)
-│   ├── 📂 types/            # TypeScript interfaces & types
-│   ├── 📂 scripts/          # Database seeding & utilities
-│   └── 📄 server.ts         # Application entry point
-├── 📂 docs/                 # Additional documentation
-├── 📄 package.json
-├── 📄 tsconfig.json
-└── 📄 README.md
-```
-
----
-
-## 📖 API Reference
-
-### Base URL
-```
-Development: http://localhost:3001/api
-Production: https://api.web3economy.com/api
-```
+## API Endpoints
 
 ### Authentication
-All admin endpoints require a JWT token:
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/admin/login` | Admin login | No |
+| POST | `/api/admin/register` | Register new admin | Yes |
+| GET | `/api/admin/me` | Get current admin profile | Yes |
+| PUT | `/api/admin/password` | Change password | Yes |
+
+### Events
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/events` | List all events | No |
+| GET | `/api/events/:id` | Get event by ID | No |
+| POST | `/api/events` | Create event | Yes |
+| PUT | `/api/events/:id` | Update event | Yes |
+| DELETE | `/api/events/:id` | Delete event | Yes |
+
+### Creators
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/creators` | List all creators | No |
+| GET | `/api/creators/:id` | Get creator by ID | No |
+| POST | `/api/creators` | Create creator | Yes |
+| PUT | `/api/creators/:id` | Update creator | Yes |
+| DELETE | `/api/creators/:id` | Delete creator | Yes |
+
+### Builder Projects
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/builders/projects` | List all projects | No |
+| GET | `/api/builders/projects/:id` | Get project by ID | No |
+| POST | `/api/builders/projects` | Create project | Yes |
+| PUT | `/api/builders/projects/:id` | Update project | Yes |
+| DELETE | `/api/builders/projects/:id` | Delete project | Yes |
+
+### Resources
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/resources` | List resources (with filters) | No |
+| GET | `/api/resources/:slug` | Get resource by slug | No |
+| GET | `/api/resources/id/:id` | Get resource by ID | No |
+| POST | `/api/resources` | Create resource | Yes |
+| PUT | `/api/resources/:id` | Update resource | Yes |
+| DELETE | `/api/resources/:id` | Delete resource | Yes |
+| POST | `/api/resources/:id/download` | Track download | No |
+
+### Contact
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/contact` | Submit contact form | No |
+| GET | `/api/contact` | List submissions | Yes |
+| GET | `/api/contact/:id` | Get submission | Yes |
+| DELETE | `/api/contact/:id` | Delete submission | Yes |
+
+### Newsletter
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/newsletter/subscribe` | Subscribe | No |
+| POST | `/api/newsletter/unsubscribe` | Unsubscribe | No |
+| GET | `/api/newsletter/subscribers` | List subscribers | Yes |
+| DELETE | `/api/newsletter/subscribers/:id` | Delete subscriber | Yes |
+
+## Query Parameters
+
+### Events
+- `status`: Filter by status (upcoming, past, live)
+- `type`: Filter by event type
+- `page`: Page number (default: 1)
+- `limit`: Items per page (default: 20)
+
+### Resources
+- `category`: Filter by category
+- `type`: Filter by type (Tutorial, Documentation, Tool, Video)
+- `level`: Filter by level (Beginner, Intermediate, Advanced)
+- `search`: Search in title, description, tags
+- `featured`: Filter featured resources
+- `page`, `limit`: Pagination
+
+## Authentication
+
+Admin endpoints require a JWT token in the Authorization header:
+
 ```
 Authorization: Bearer <your-jwt-token>
 ```
 
-### Endpoints Overview
+To obtain a token, login via `/api/admin/login`:
 
-<details>
-<summary><b>🔐 Authentication</b></summary>
+```bash
+curl -X POST http://localhost:3001/api/admin/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@web3economy.com", "password": "Admin123!"}'
+```
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `POST` | `/admin/login` | Admin login | ❌ |
-| `POST` | `/admin/register` | Register new admin | ✅ |
-| `GET` | `/admin/me` | Get current profile | ✅ |
-| `PUT` | `/admin/password` | Change password | ✅ |
+## Response Format
 
-</details>
-
-<details>
-<summary><b>📅 Events</b></summary>
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `GET` | `/events` | List all events | ❌ |
-| `GET` | `/events/:id` | Get event by ID | ❌ |
-| `POST` | `/events` | Create event | ✅ |
-| `PUT` | `/events/:id` | Update event | ✅ |
-| `DELETE` | `/events/:id` | Delete event | ✅ |
-
-**Query Parameters:**
-- `status` — Filter by status (`upcoming`, `past`, `live`)
-- `type` — Filter by event type
-- `page` — Page number (default: 1)
-- `limit` — Items per page (default: 20)
-
-</details>
-
-<details>
-<summary><b>👥 Creators</b></summary>
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `GET` | `/creators` | List all creators | ❌ |
-| `GET` | `/creators/:id` | Get creator by ID | ❌ |
-| `POST` | `/creators` | Create creator | ✅ |
-| `PUT` | `/creators/:id` | Update creator | ✅ |
-| `DELETE` | `/creators/:id` | Delete creator | ✅ |
-
-</details>
-
-<details>
-<summary><b>🏗️ Builder Projects</b></summary>
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `GET` | `/builders/projects` | List all projects | ❌ |
-| `GET` | `/builders/projects/:id` | Get project by ID | ❌ |
-| `POST` | `/builders/projects` | Create project | ✅ |
-| `PUT` | `/builders/projects/:id` | Update project | ✅ |
-| `DELETE` | `/builders/projects/:id` | Delete project | ✅ |
-
-</details>
-
-<details>
-<summary><b>📚 Resources</b></summary>
-
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `GET` | `/resources` | List resources | ❌ |
-| `GET` | `/resources/:slug` | Get by slug | ❌ |
-| `GET` | `/resources/id/:id` | Get by ID | ❌ |
-| `POST` | `/resources` | Create resource | ✅ |
-| `PUT` | `/resources/:id` | Update resource | ✅ |
-| `DELETE` | `/resources/:id` | Delete resource | ✅ |
-| `POST` | `/resources/:id/download` | Track download | ❌ |
-
-**Query Parameters:**
-- `category` — Filter by category
-- `type` — Tutorial, Documentation, Tool, Video
-- `level` — Beginner, Intermediate, Advanced
-- `search` — Search in title, description, tags
-- `featured` — Filter featured resources
-
-</details>
-
-<details>
-<summary><b>📬 Contact & Newsletter</b></summary>
-
-**Contact:**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `POST` | `/contact` | Submit form | ❌ |
-| `GET` | `/contact` | List submissions | ✅ |
-| `GET` | `/contact/:id` | Get submission | ✅ |
-| `DELETE` | `/contact/:id` | Delete submission | ✅ |
-
-**Newsletter:**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|:----:|
-| `POST` | `/newsletter/subscribe` | Subscribe | ❌ |
-| `POST` | `/newsletter/unsubscribe` | Unsubscribe | ❌ |
-| `GET` | `/newsletter/subscribers` | List subscribers | ✅ |
-| `DELETE` | `/newsletter/subscribers/:id` | Delete subscriber | ✅ |
-
-</details>
-
-### Response Format
-
-**Success Response:**
+### Success Response
 ```json
 {
   "success": true,
@@ -306,7 +184,7 @@ Authorization: Bearer <your-jwt-token>
 }
 ```
 
-**Error Response:**
+### Error Response
 ```json
 {
   "success": false,
@@ -318,152 +196,45 @@ Authorization: Bearer <your-jwt-token>
 }
 ```
 
-### Rate Limits
+## Rate Limiting
 
 | Endpoint Type | Limit |
 |--------------|-------|
-| General API | 100 requests / 15 min |
-| Contact Form | 5 requests / hour |
-| Newsletter | 5 requests / hour |
-| Login | 10 attempts / 15 min |
-| Downloads | 30 requests / min |
+| General endpoints | 100 requests/15 min |
+| Contact form | 5 requests/hour |
+| Newsletter subscribe | 5 requests/hour |
+| Login | 10 attempts/15 min |
+| Downloads | 30 requests/min |
 
----
+## Project Structure
 
-## 🤝 Contributing
-
-We love contributions from our community! Web3 Economy is built by builders, for builders.
-
-### How to Contribute
-
-1. **Fork the repository**
-   ```bash
-   git fork https://github.com/cypherpulse/web3Economy-Backend.git
-   ```
-
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-
-3. **Make your changes**
-   - Follow the existing code style
-   - Add tests if applicable
-   - Update documentation as needed
-
-4. **Commit your changes**
-   ```bash
-   git commit -m "feat: add amazing feature"
-   ```
-   
-   We follow [Conventional Commits](https://www.conventionalcommits.org/):
-   - `feat:` — New feature
-   - `fix:` — Bug fix
-   - `docs:` — Documentation changes
-   - `style:` — Code style changes
-   - `refactor:` — Code refactoring
-   - `test:` — Adding tests
-   - `chore:` — Maintenance tasks
-
-5. **Push and create a Pull Request**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-
-### Development Guidelines
-
-- ✅ Write clean, readable TypeScript code
-- ✅ Follow existing project structure
-- ✅ Add JSDoc comments for public functions
-- ✅ Handle errors gracefully
-- ✅ Use meaningful variable and function names
-- ✅ Keep functions small and focused
-
-### First-Time Contributors
-
-Look for issues labeled [`good first issue`](https://github.com/cypherpulse/web3Economy-Backend/labels/good%20first%20issue) — these are great starting points!
-
----
-
-## 🚢 Deployment
-
-### Production Build
-
-```bash
-# Build the application
-pnpm build
-
-# The compiled files will be in the dist/ folder
+```
+src/
+├── config/          # Database and app configuration
+├── controllers/     # Request handlers
+├── middleware/      # Auth, error handling, rate limiting
+├── models/          # Mongoose schemas
+├── routes/          # API route definitions
+├── services/        # Email, Cloudinary services
+├── types/           # TypeScript interfaces
+├── scripts/         # Database seeding
+└── server.ts        # Application entry point
 ```
 
-### Deploy with PM2
+## Production Deployment
 
-```bash
-# Install PM2 globally
-npm install -g pm2
+1. Build the application:
+   ```bash
+   npm run build
+   ```
 
-# Start the application
-pm2 start dist/server.js --name web3economy-api
+2. Set environment variables for production
 
-# Save the process list
-pm2 save
+3. Start with PM2:
+   ```bash
+   pm2 start dist/server.js --name web3economy-api
+   ```
 
-# Set up startup script
-pm2 startup
-```
+## License
 
-### Environment Variables for Production
-
-Ensure all environment variables are properly set in your production environment. Never commit `.env` files to version control.
-
----
-
-## 🗺️ Roadmap
-
-- [ ] GraphQL API support
-- [ ] WebSocket for real-time updates
-- [ ] Multi-language support
-- [ ] Advanced analytics dashboard
-- [ ] OAuth integration (Google, GitHub)
-- [ ] Blockchain wallet authentication
-- [ ] Event RSVP and ticketing system
-
----
-
-## 🌍 Community
-
-Join our growing Web3 community!
-
-<div align="center">
-
-[![Twitter](https://img.shields.io/badge/Twitter-@Web3Economy-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/web3economy)
-[![Discord](https://img.shields.io/badge/Discord-Join_Us-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/web3economy)
-[![Website](https://img.shields.io/badge/Website-web3economy.com-FF6B6B?style=for-the-badge&logo=google-chrome&logoColor=white)](https://web3economy.com)
-
-</div>
-
----
-
-## 📄 License
-
-This project is licensed under the **ISC License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- All our amazing community contributors
-- The Web3 builders who inspire us daily
-- Open-source projects that make this possible
-
----
-
-<div align="center">
-
-**Built with ❤️ by the Web3 Economy Community**
-
-*Onboarding everyone onchain, one builder at a time.*
-
-⭐ Star this repo if you find it helpful!
-
-</div>
+ISC
